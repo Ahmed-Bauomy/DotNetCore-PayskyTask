@@ -24,6 +24,5 @@ namespace EmploymentSystem.Application.Contracts.Adapters
         Task<Vacancy> AddAsync(CreateVacancyCommand entity);
         Task UpdateAsync(UpdateVacancyCommand entity, Vacancy dbEntity);
         Task DeleteAsync(Vacancy entity);
-        Task<bool> ApplyToVacancy(int vacancyId, string userId);
     }
 }
