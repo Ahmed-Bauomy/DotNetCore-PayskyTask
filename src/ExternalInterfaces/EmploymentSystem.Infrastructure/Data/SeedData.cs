@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EmploymentSystem.Application.Contracts.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -10,26 +11,19 @@ namespace EmploymentSystem.Infrastructure.Data
 {
     public class SeedData
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IIdentityService _identityService;
 
-        public SeedData(RoleManager<IdentityRole> roleManager,IConfiguration configuration)
+        public SeedData(IConfiguration configuration, IIdentityService identityService)
         {
-            _roleManager = roleManager;
             _configuration = configuration;
+            _identityService = identityService;
         }
-
 
         public async Task SetUpRoles()
         {
             var roles = _configuration.GetSection("Roles").Get<IEnumerable<string>>();
-            foreach (var role in roles) 
-            { 
-                if(!await _roleManager.RoleExistsAsync(role))
-                {
-                    await _roleManager.CreateAsync(new IdentityRole(role));
-                }
-            }
+            await _identityService.CreateRolesAsync(roles);
         }
     }
 }

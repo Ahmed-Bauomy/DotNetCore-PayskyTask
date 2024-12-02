@@ -3,7 +3,9 @@ using EmploymentSystem.Application.Features.Vacancy.Commands.DeleteVacancy;
 using EmploymentSystem.Application.Features.Vacancy.Commands.UpdateVacancy;
 using EmploymentSystem.Application.Features.Vacancy.Queries.GetVacancies;
 using EmploymentSystem.Application.Models;
+using EmploymentSystem.Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -13,6 +15,7 @@ namespace EmploymentSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Attributes.Authorize("Employer")]
     public class VacanciesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -24,9 +27,11 @@ namespace EmploymentSystem.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<VacancyDTO>),(int)HttpStatusCode.OK)]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<VacancyDTO>>> GetVacancies()
         {
-           var vacancies = await _mediator.Send(new GetVacanciesQuery());
+            var test = User.Identity.Name;
+            var vacancies = await _mediator.Send(new GetVacanciesQuery());
             return Ok(vacancies);
         }
 
