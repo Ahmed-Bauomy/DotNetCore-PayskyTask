@@ -7,9 +7,9 @@ There are two user types (Employer and Applicant).
 - Each user role have specific functions.
 - Employer user:
   - CRUD functions for vacancies.
-  - Vacancy should have max number of allowed applications.
+  - Vacancy have max number of allowed applications.
   - Post and deactivate vacancy.
-  - Vacancies should have an expiry date.
+  - Vacancies have an expiry date.
 - Applicant user:
   - Apply for vacancy.
 
