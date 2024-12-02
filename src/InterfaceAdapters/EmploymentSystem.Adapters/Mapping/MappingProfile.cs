@@ -15,9 +15,9 @@ namespace EmploymentSystem.Adapters.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<CreateVacancyCommand, Vacancy>();
-            CreateMap<UpdateVacancyCommand, Vacancy>().ReverseMap();
-            CreateMap<Vacancy, VacancyDTO>();
+            CreateMap<CreateVacancyCommand, Vacancy>().PreserveReferences();
+            CreateMap<UpdateVacancyCommand, Vacancy>().ReverseMap().PreserveReferences();
+            CreateMap<Vacancy, VacancyDTO>().PreserveReferences();
         }
     }
 }

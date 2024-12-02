@@ -15,7 +15,7 @@ namespace EmploymentSystem.Infrastructure.Repositories
 {
     public class VacancyRepository : IVacancyRepository
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly DbSet<VacancyModel> _dbSet;
         private readonly IMapper _mapper;
         public VacancyRepository(ApplicationDbContext dbContext,IMapper mapper)
@@ -26,7 +26,7 @@ namespace EmploymentSystem.Infrastructure.Repositories
         }
         public async Task<IReadOnlyList<Vacancy>> GetAllAsync()
         {
-            return _mapper.Map<List<Vacancy>>(await _dbSet.ToListAsync());
+            return _mapper.Map<List<Vacancy>>(await _dbSet.Include(v => v.AppliedUsers).Include(v => v.Employer).ToListAsync());
         }
 
         public async Task<IReadOnlyList<Vacancy>> GetAsync(Expression<Func<Vacancy, bool>> predicate)
@@ -75,6 +75,18 @@ namespace EmploymentSystem.Infrastructure.Repositories
             var vacancyModel = _mapper.Map<VacancyModel>(entity);
             _dbSet.Remove(vacancyModel);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<VacanciesUsers> ApplyUserToVacancy(VacanciesUsers entity)
+        {
+            var model = _mapper.Map<VacanciesAppliedUsers>(entity);
+            var vacancy = _dbSet.Include(t => t.AppliedUsers).FirstOrDefault(t => t.Id == model.VacancyId);
+            if (vacancy != null)
+            {
+                vacancy.AppliedUsers.Add(model);
+                await _context.SaveChangesAsync();
+            }
+            return entity;
         }
     }
 }

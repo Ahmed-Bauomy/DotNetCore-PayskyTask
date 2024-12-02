@@ -1,4 +1,5 @@
-﻿using EmploymentSystem.Application.Features.Vacancy.Commands.CreateVacancy;
+﻿using EmploymentSystem.Application.Features.Vacancy.Commands.ApplyToVacancy;
+using EmploymentSystem.Application.Features.Vacancy.Commands.CreateVacancy;
 using EmploymentSystem.Application.Features.Vacancy.Commands.UpdateVacancy;
 using EmploymentSystem.Application.Models;
 using EmploymentSystem.Domain.Entities;
@@ -24,5 +25,7 @@ namespace EmploymentSystem.Application.Contracts.Adapters
         Task<Vacancy> AddAsync(CreateVacancyCommand entity);
         Task UpdateAsync(UpdateVacancyCommand entity, Vacancy dbEntity);
         Task DeleteAsync(Vacancy entity);
+
+        Task<bool> ApplyToVacancy(ApplyToVacancyCommand applyToVacancyCommand);
     }
 }

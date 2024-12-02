@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmploymentSystem.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace EmploymentSystem.Application.Models
         public string? Description { get; set; }
         public bool IsActive { get; set; }
         public int MaxNumberOfAllowedApplications { get; set; }
+        public virtual User Employer { get; set; }
+        public virtual ICollection<VacanciesUsers> AppliedUsers { get; set; }
     }
 }

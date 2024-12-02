@@ -26,25 +26,23 @@ namespace EmploymentSystem.API.Attributes
             var userId = user.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
             if (user != null && _roles.Any())
             {
-                using (var db = context.HttpContext.RequestServices.GetService<ApplicationDbContext>())
-                {
-                    var userRoles = (from ur in db.UserRoles
-                                     join r in db.Roles on ur.RoleId equals r.Id
-                                     join u in db.Users on ur.UserId equals u.Id
-                                     where u.Id == userId
-                                     select new
-                                     {
-                                         r.Name
-                                     }).ToList();
+                var db = context.HttpContext.RequestServices.GetService<ApplicationDbContext>();
+                var userRoles = (from ur in db.UserRoles
+                                 join r in db.Roles on ur.RoleId equals r.Id
+                                 join u in db.Users on ur.UserId equals u.Id
+                                 where u.Id == userId
+                                 select new
+                                 {
+                                     r.Name
+                                 }).ToList();
 
-                    var isAuthorized = false;
-                    foreach (var role in userRoles)
-                    {
-                        if (_roles.Contains(role.Name))
-                            isAuthorized = true;
-                    }
-                    if (isAuthorized) return;
+                var isAuthorized = false;
+                foreach (var role in userRoles)
+                {
+                    if (_roles.Contains(role.Name))
+                        isAuthorized = true;
                 }
+                if (isAuthorized) return;
             }
 
             context.Result = new UnauthorizedResult();
