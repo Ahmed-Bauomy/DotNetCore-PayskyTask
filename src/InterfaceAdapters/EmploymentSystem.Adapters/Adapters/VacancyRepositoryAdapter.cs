@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmploymentSystem.Application.Contracts;
 using EmploymentSystem.Application.Contracts.Adapters;
+using EmploymentSystem.Application.Features.Vacancy.Commands.ApplyToVacancy;
 using EmploymentSystem.Application.Features.Vacancy.Commands.CreateVacancy;
 using EmploymentSystem.Application.Features.Vacancy.Commands.UpdateVacancy;
 using EmploymentSystem.Application.Models;
@@ -29,6 +30,13 @@ namespace EmploymentSystem.Adapters.Adapters
         {
             var vacancy = _mapper.Map<Vacancy>(entity);
             return await _vacancyRepository.AddAsync(vacancy);
+        }
+
+        public async Task<bool> ApplyToVacancy(ApplyToVacancyCommand applyToVacancyCommand)
+        {
+            var entity = _mapper.Map<VacanciesUsers>(applyToVacancyCommand);
+            await _vacancyRepository.ApplyUserToVacancy(entity);
+            return true;
         }
 
         public async Task DeleteAsync(Vacancy entity)

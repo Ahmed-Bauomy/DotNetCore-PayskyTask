@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EmploymentSystem.Application.Features.User.Commands.SignInUser;
 using EmploymentSystem.Application.Features.User.Commands.SignUpUser;
+using EmploymentSystem.Application.Features.Vacancy.Commands.ApplyToVacancy;
 using EmploymentSystem.Domain.Entities;
 using EmploymentSystem.Infrastructure.Models;
 using System;
@@ -15,10 +16,12 @@ namespace EmploymentSystem.Infrastructure.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Vacancy, VacancyModel>().ReverseMap();
-            CreateMap<User, ApplicationUser>().ReverseMap();
-            CreateMap<VacanciesUsers, VacanciesAppliedUsers>().ReverseMap();
-            CreateMap<SignUpUserCommand, ApplicationUser>().ReverseMap();
+            CreateMap<Vacancy, VacancyModel>().ReverseMap().PreserveReferences();
+            CreateMap<User, ApplicationUser>().ReverseMap().PreserveReferences();
+            CreateMap<VacanciesUsers, VacanciesAppliedUsers>().ReverseMap().PreserveReferences()
+                .ForMember(v => v.UserName,opt => opt.MapFrom(t => t.ApplicationUser.UserName));
+            CreateMap<SignUpUserCommand, ApplicationUser>().ReverseMap().PreserveReferences();
+            CreateMap<ApplyToVacancyCommand, VacanciesUsers>().ReverseMap().PreserveReferences();
         }
     }
 }

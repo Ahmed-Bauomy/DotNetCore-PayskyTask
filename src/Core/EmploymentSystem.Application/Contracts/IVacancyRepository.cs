@@ -15,6 +15,6 @@ namespace EmploymentSystem.Application.Contracts
 {
     public interface IVacancyRepository : IAsyncRepository<Vacancy>
     {
-
+        Task<VacanciesUsers> ApplyUserToVacancy(VacanciesUsers entity);
     }
 }
