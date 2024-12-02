@@ -1,4 +1,4 @@
-# DotNetCore-PayskyTask
+# DotNetCore-Employment System
 Employment System is a basic project that provide CURD operations for Vacancies.
 There are two user types (Employer and Applicant).
 - System have below shared functions:
