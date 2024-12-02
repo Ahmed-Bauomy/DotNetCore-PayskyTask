@@ -23,7 +23,7 @@ I used Clean architecture with CQRS
 I also used these packages Mediator, FluentValidation, AutoMapper.
 
 ## how to run
-the project has auto migrate migrations for the database.
+the project has auto migrated migrations for the database so don't worry about it, just change connection string in appSettings.json file to your own database.
 the project has swagger documentation if you want to try project functionality use swagger end points, and don't forget to login first and add the token in the authorization section in the top right handside in the form "Bearer {token_value}"
 
 ## Contributing
