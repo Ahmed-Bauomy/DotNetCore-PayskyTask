@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using EmploymentSystem.Application.Features.User.Commands.SignInUser;
+using EmploymentSystem.Application.Features.User.Commands.SignUpUser;
 using EmploymentSystem.Domain.Entities;
 using EmploymentSystem.Infrastructure.Models;
 using System;
@@ -16,6 +18,7 @@ namespace EmploymentSystem.Infrastructure.Mapping
             CreateMap<Vacancy, VacancyModel>().ReverseMap();
             CreateMap<User, ApplicationUser>().ReverseMap();
             CreateMap<VacanciesUsers, VacanciesAppliedUsers>().ReverseMap();
+            CreateMap<SignUpUserCommand, ApplicationUser>().ReverseMap();
         }
     }
 }
