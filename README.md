@@ -2,16 +2,16 @@
 Employment System is a basic project that provide CURD operations for Vacancies.
 There are two user types (Employer and Applicant).
 - System have below shared functions:
-  o Self-registration for both user types.
-  o Login.
+   - Self-registration for both user types.
+   - Login.
 - Each user role have specific functions.
 - Employer user:
-o CRUD functions for vacancies.
-o Vacancy should have max number of allowed applications.
-o Post and deactivate vacancy.
-o Vacancies should have an expiry date.
-- Applicant user: 
-o Apply for vacancy. 
+  - CRUD functions for vacancies.
+  - Vacancy should have max number of allowed applications.
+  - Post and deactivate vacancy.
+  - Vacancies should have an expiry date.
+- Applicant user:
+  - Apply for vacancy. 
 
 ## Technologies
 I used .Net Core 6 with microsoft sql server database and web API as a backend
