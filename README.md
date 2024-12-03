@@ -15,8 +15,7 @@ There are two user types (Employer and Applicant).
 
 
 ## Technologies
-I used .Net Core 6 with microsoft sql server database and web API as a backend
-also used Angular as a frontend interface
+I used .Net Core 6 with microsoft sql server database and web API as a backend.
 
 ## Archtictures
 I used Clean architecture with CQRS
