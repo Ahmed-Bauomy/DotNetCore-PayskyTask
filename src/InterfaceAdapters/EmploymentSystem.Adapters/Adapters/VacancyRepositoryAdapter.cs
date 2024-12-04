@@ -18,11 +18,13 @@ namespace EmploymentSystem.Adapters.Adapters
     public class VacancyRepositoryAdapter : IVacancyRepositoryAdapter
     {
         private readonly IVacancyRepository _vacancyRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public VacancyRepositoryAdapter(IVacancyRepository vacancyRepository, IMapper mapper)
+        public VacancyRepositoryAdapter(IVacancyRepository vacancyRepository, IUserRepository userRepository, IMapper mapper)
         {
             _vacancyRepository = vacancyRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
@@ -32,13 +34,6 @@ namespace EmploymentSystem.Adapters.Adapters
             return await _vacancyRepository.AddAsync(vacancy);
         }
 
-        public async Task<bool> ApplyToVacancy(ApplyToVacancyCommand applyToVacancyCommand)
-        {
-            var entity = _mapper.Map<VacanciesUsers>(applyToVacancyCommand);
-            await _vacancyRepository.ApplyUserToVacancy(entity);
-            return true;
-        }
-
         public async Task DeleteAsync(Vacancy entity)
         {
             await _vacancyRepository.DeleteAsync(entity);
@@ -46,6 +41,7 @@ namespace EmploymentSystem.Adapters.Adapters
 
         public async Task<IReadOnlyList<VacancyDTO>> GetAllAsync()
         {
+            //var vacancies = await _vacancyRepository.GetAsync(null, null, "AppliedUsers");
             var vacancies = await _vacancyRepository.GetAllAsync();
             return _mapper.Map<List<VacancyDTO>>(vacancies);
         }
@@ -62,6 +58,18 @@ namespace EmploymentSystem.Adapters.Adapters
             return _mapper.Map<List<VacancyDTO>>(vacancies);
         }
 
+        public async Task<VacancyDTO> GetByIdIncludeUsersAsync(int id)
+        {
+            var result = await _vacancyRepository.GetAsync(v => v.Id == id,null, "AppliedUsers");
+            var vacancy = result.FirstOrDefault();
+            var vacancyDTO = _mapper.Map<VacancyDTO>(vacancy);
+            var UserCreatedVacancy = await _userRepository.GetUserByIdAsync(vacancy.ApplicationUserId);
+            var appliedUsers = await _userRepository.GetUsersAsync(vacancy.AppliedUsers.Select(a => a.ApplicationUserId).ToList());
+            vacancyDTO.EmployerName = UserCreatedVacancy.UserName;
+            vacancyDTO.AppliedUsers = appliedUsers.ToList();
+            return vacancyDTO;
+        }
+
         public async Task<Vacancy> GetByIdAsync(int id)
         {
             return await _vacancyRepository.GetByIdAsync(id);
@@ -71,6 +79,13 @@ namespace EmploymentSystem.Adapters.Adapters
         {
             _mapper.Map(entity,dbEntity, typeof(UpdateVacancyCommand), typeof(Vacancy));
             await _vacancyRepository.UpdateAsync(dbEntity);
+        }
+
+        public async Task<bool> ApplyToVacancy(ApplyToVacancyCommand applyToVacancyCommand)
+        {
+            var entity = _mapper.Map<VacanciesAppliedUsers>(applyToVacancyCommand);
+            await _vacancyRepository.ApplyUserToVacancy(entity);
+            return true;
         }
     }
 }

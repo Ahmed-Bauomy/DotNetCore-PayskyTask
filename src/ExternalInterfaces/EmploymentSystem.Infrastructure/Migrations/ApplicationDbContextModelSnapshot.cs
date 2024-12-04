@@ -22,6 +22,69 @@ namespace EmploymentSystem.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("EmploymentSystem.Domain.Entities.VacanciesAppliedUsers", b =>
+                {
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("VacancyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApplicationUserId", "VacancyId");
+
+                    b.HasIndex("VacancyId");
+
+                    b.ToTable("VacanciesAppliedUsers");
+                });
+
+            modelBuilder.Entity("EmploymentSystem.Domain.Entities.Vacancy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxNumberOfAllowedApplications")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Vacancies");
+                });
+
             modelBuilder.Entity("EmploymentSystem.Infrastructure.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -97,69 +160,6 @@ namespace EmploymentSystem.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("EmploymentSystem.Infrastructure.Models.VacanciesAppliedUsers", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("VacancyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "VacancyId");
-
-                    b.HasIndex("VacancyId");
-
-                    b.ToTable("VacanciesAppliedUsers");
-                });
-
-            modelBuilder.Entity("EmploymentSystem.Infrastructure.Models.VacancyModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MaxNumberOfAllowedApplications")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployerId");
-
-                    b.ToTable("Vacancies");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -295,32 +295,28 @@ namespace EmploymentSystem.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EmploymentSystem.Infrastructure.Models.VacanciesAppliedUsers", b =>
+            modelBuilder.Entity("EmploymentSystem.Domain.Entities.VacanciesAppliedUsers", b =>
                 {
-                    b.HasOne("EmploymentSystem.Infrastructure.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("EmploymentSystem.Infrastructure.Models.ApplicationUser", null)
                         .WithMany("AppliedVacancies")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EmploymentSystem.Infrastructure.Models.VacancyModel", "Vacancy")
+                    b.HasOne("EmploymentSystem.Domain.Entities.Vacancy", "Vacancy")
                         .WithMany("AppliedUsers")
                         .HasForeignKey("VacancyId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
-
                     b.Navigation("Vacancy");
                 });
 
-            modelBuilder.Entity("EmploymentSystem.Infrastructure.Models.VacancyModel", b =>
+            modelBuilder.Entity("EmploymentSystem.Domain.Entities.Vacancy", b =>
                 {
-                    b.HasOne("EmploymentSystem.Infrastructure.Models.ApplicationUser", "Employer")
+                    b.HasOne("EmploymentSystem.Infrastructure.Models.ApplicationUser", null)
                         .WithMany("CreatedVacancies")
-                        .HasForeignKey("EmployerId");
-
-                    b.Navigation("Employer");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -374,16 +370,16 @@ namespace EmploymentSystem.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EmploymentSystem.Domain.Entities.Vacancy", b =>
+                {
+                    b.Navigation("AppliedUsers");
+                });
+
             modelBuilder.Entity("EmploymentSystem.Infrastructure.Models.ApplicationUser", b =>
                 {
                     b.Navigation("AppliedVacancies");
 
                     b.Navigation("CreatedVacancies");
-                });
-
-            modelBuilder.Entity("EmploymentSystem.Infrastructure.Models.VacancyModel", b =>
-                {
-                    b.Navigation("AppliedUsers");
                 });
 #pragma warning restore 612, 618
         }

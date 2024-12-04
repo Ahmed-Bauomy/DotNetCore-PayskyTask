@@ -16,9 +16,8 @@ namespace EmploymentSystem.Domain.Entities
         public string? Description { get; set; }
         public bool IsActive { get; set; }
         public int MaxNumberOfAllowedApplications { get; set; }
-        public string? EmployerId { get; set; }
+        public string? ApplicationUserId { get; set; }
 
-        public virtual User Employer { get; set; }
-        public virtual ICollection<VacanciesUsers> AppliedUsers { get; set; }
+        public virtual ICollection<VacanciesAppliedUsers> AppliedUsers { get; set; }
     }
 }

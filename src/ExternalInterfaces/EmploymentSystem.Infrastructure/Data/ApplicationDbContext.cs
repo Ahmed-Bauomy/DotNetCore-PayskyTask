@@ -18,32 +18,20 @@ namespace EmploymentSystem.Infrastructure.Data
         {
             Database.Migrate();
         }
-        public virtual DbSet<VacancyModel> Vacancies { get; set; }
+        public virtual DbSet<Vacancy> Vacancies { get; set; }
         public virtual DbSet<VacanciesAppliedUsers> VacanciesAppliedUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<VacanciesAppliedUsers>()
-                .HasKey(t => new { t.UserId, t.VacancyId });
+                .HasKey(t => new { t.ApplicationUserId, t.VacancyId });
 
-
-            builder.Entity<VacanciesAppliedUsers>()
-                   .HasOne(t => t.ApplicationUser)
-                   .WithMany(t => t.AppliedVacancies)
-                   .HasForeignKey(t => t.UserId)
-                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<VacanciesAppliedUsers>()
                    .HasOne(t => t.Vacancy)
                    .WithMany(t => t.AppliedUsers)
                    .HasForeignKey(t => t.VacancyId)
                    .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<VacancyModel>()
-                   .HasOne(t => t.Employer)
-                   .WithMany(x => x.CreatedVacancies)
-                   .HasForeignKey(x => x.EmployerId)
-                   .IsRequired(false);
 
             base.OnModelCreating(builder);
         }

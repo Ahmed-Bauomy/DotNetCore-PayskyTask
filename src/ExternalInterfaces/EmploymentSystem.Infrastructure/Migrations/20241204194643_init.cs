@@ -163,44 +163,44 @@ namespace EmploymentSystem.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     MaxNumberOfAllowedApplications = table.Column<int>(type: "int", nullable: false),
-                    EmployerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vacancies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vacancies_AspNetUsers_EmployerId",
-                        column: x => x.EmployerId,
+                        name: "FK_Vacancies_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "VacanciesAppliedUsers",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     VacancyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VacanciesAppliedUsers", x => new { x.UserId, x.VacancyId });
+                    table.PrimaryKey("PK_VacanciesAppliedUsers", x => new { x.ApplicationUserId, x.VacancyId });
                     table.ForeignKey(
-                        name: "FK_VacanciesAppliedUsers_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_VacanciesAppliedUsers_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_VacanciesAppliedUsers_Vacancies_VacancyId",
                         column: x => x.VacancyId,
@@ -248,9 +248,9 @@ namespace EmploymentSystem.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vacancies_EmployerId",
+                name: "IX_Vacancies_ApplicationUserId",
                 table: "Vacancies",
-                column: "EmployerId");
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VacanciesAppliedUsers_VacancyId",

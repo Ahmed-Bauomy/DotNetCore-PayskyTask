@@ -31,6 +31,7 @@ namespace EmploymentSystem.Infrastructure
                 option.UseSqlServer(configuration.GetConnectionString("Default"));
             });
 
+            services.AddHttpContextAccessor();
             // Configure Identity
             services.AddIdentity<ApplicationUser,IdentityRole>(o =>
             {
@@ -40,7 +41,8 @@ namespace EmploymentSystem.Infrastructure
                 o.Password.RequireNonAlphanumeric = true;
                 o.Password.RequiredLength = 6;
                 o.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            }).AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             // Configure JWT
             services.Configure<JwtSettings>(options => configuration.GetSection(nameof(JwtSettings)).Bind(options));
@@ -76,6 +78,7 @@ namespace EmploymentSystem.Infrastructure
             services.AddScoped<IVacancyRepository, VacancyRepository>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<SeedData>();
             return services;
         }

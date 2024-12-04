@@ -15,5 +15,6 @@ namespace EmploymentSystem.Application.Features.Vacancy.Commands.CreateVacancy
         public string? Description { get; set; }
         public bool IsActive { get; set; }
         public int MaxNumberOfAllowedApplications { get; set; }
+        public string? ApplicationUserId { get; set; }
     }
 }
