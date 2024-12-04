@@ -17,7 +17,8 @@ namespace EmploymentSystem.Adapters.Mapping
         {
             CreateMap<CreateVacancyCommand, Vacancy>().PreserveReferences();
             CreateMap<UpdateVacancyCommand, Vacancy>().ReverseMap().PreserveReferences();
-            CreateMap<Vacancy, VacancyDTO>().PreserveReferences();
+            CreateMap<Vacancy, VacancyDTO>()
+                .ForMember(v => v.AppliedUsers,t => t.Ignore());
         }
     }
 }

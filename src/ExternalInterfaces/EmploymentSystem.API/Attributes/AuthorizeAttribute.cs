@@ -23,7 +23,7 @@ namespace EmploymentSystem.API.Attributes
             if (allowAnonymous.Any()) return;
 
             var user = context.HttpContext.User;
-            var userId = user.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier).Value; //user.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
             if (user != null && _roles.Any())
             {
                 var db = context.HttpContext.RequestServices.GetService<ApplicationDbContext>();

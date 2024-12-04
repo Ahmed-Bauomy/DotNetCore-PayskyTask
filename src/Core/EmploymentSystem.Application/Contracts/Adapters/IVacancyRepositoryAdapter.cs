@@ -22,6 +22,7 @@ namespace EmploymentSystem.Application.Contracts.Adapters
                                         bool disableTracking = true);
 
         Task<Vacancy> GetByIdAsync(int id);
+        Task<VacancyDTO> GetByIdIncludeUsersAsync(int id);
         Task<Vacancy> AddAsync(CreateVacancyCommand entity);
         Task UpdateAsync(UpdateVacancyCommand entity, Vacancy dbEntity);
         Task DeleteAsync(Vacancy entity);

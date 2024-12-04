@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace EmploymentSystem.Infrastructure.Repositories
 {
-    public class RepositoryBase<T> : IAsyncRepository<T> where T : EntityBase
+    public class RepositoryBase<T> : IAsyncRepository<T> where T : class
     {
         private readonly DbContext _context;
-        private readonly DbSet<T> _dbSet;
+        public readonly DbSet<T> _dbSet;
         public RepositoryBase(DbContext dbContext)
         {
             _context = dbContext;
@@ -41,7 +41,7 @@ namespace EmploymentSystem.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(object id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -55,7 +55,7 @@ namespace EmploymentSystem.Infrastructure.Repositories
 
         public async Task UpdateAsync(T entity)
         {
-            //_dbSet.Update(entity);
+            _dbSet.Update(entity);
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

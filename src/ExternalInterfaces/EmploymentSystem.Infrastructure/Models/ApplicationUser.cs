@@ -14,7 +14,7 @@ namespace EmploymentSystem.Infrastructure.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string CompanyName { get; set; }
-        public virtual ICollection<VacancyModel> CreatedVacancies { get; set; }
+        public virtual ICollection<Vacancy> CreatedVacancies { get; set; }
         public virtual ICollection<VacanciesAppliedUsers> AppliedVacancies { get; set; }
 
     }

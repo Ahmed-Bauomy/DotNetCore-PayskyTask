@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace EmploymentSystem.Domain.Entities
 {
-    public class VacanciesUsers
+    public class VacanciesAppliedUsers
     {
-        public string UserId { get; set; }
+        public string ApplicationUserId { get; set; }
         public int VacancyId { get; set; }
 
-        public string UserName { get; set; }
-        [JsonIgnore]
-        public virtual User ApplicationUser { get; set; }
-        [JsonIgnore]
         public virtual Vacancy Vacancy { get; set; }
     }
 }
